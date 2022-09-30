@@ -2,6 +2,8 @@
 
 honors project for physics :)
 
+You need SFML and Dear ImGui
+
 Build with g++:
 
 > g++ -c main.cpp pathToProject\imgui\imgui.cpp pathToProject\imgui\imgui_widgets.cpp pathToProject\imgui\imgui_draw.cpp pathToProject\imgui\imgui_tables.cpp pathToProject\imgui\imgui-SFML.cpp -IpathToProject\imgui -IpathToSFML\include -DSFML_STATIC
