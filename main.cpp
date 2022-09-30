@@ -15,6 +15,8 @@ int main()
 
     // setting up imgui
     ImGui::SFML::Init(window);
+    // disaplying imgui.ini
+    ImGui::GetIO().IniFilename = NULL;
 
     // logic variables
     bool showCircle = true;
