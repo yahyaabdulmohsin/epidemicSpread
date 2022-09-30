@@ -1,7 +1,17 @@
 #include <imgui.h>
 #include <imgui-SFML.h>
 #include <iostream>
+#include <cmath>
+#include <string>
+#include <sstream>
 #include <SFML/Graphics.hpp>
+
+/* TODO
+
+enable docking
+show fps
+
+*/
 
 int main()
 {
@@ -15,9 +25,8 @@ int main()
 
     // setting up imgui
     ImGui::SFML::Init(window);
-    // disaplying imgui.ini
+    // disabling imgui.ini
     ImGui::GetIO().IniFilename = NULL;
-    // enabling docking
 
     // logic variables
     bool showCircle = true;
@@ -52,6 +61,7 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+
         // update imgui
         ImGui::SFML::Update(window, deltaClock.restart());
         // imgui stuff here
@@ -62,6 +72,11 @@ int main()
         ImGui::ColorEdit3("Color", circleColor);
         if (ImGui::Button("Simulate"))
             std::cout << "Hello world!";
+        ImGui::Text("Stats");
+        ImGui::Text("S =");
+        ImGui::Text("I =");
+        ImGui::Text("R =");
+        ImGui::Text("fps =");
         ImGui::Text("www.yahyaabdulmohsin.com");
         ImGui::End();
         // clear window
@@ -84,7 +99,6 @@ int main()
         ImGui::SFML::Render(window);
         // display window
         window.display();
-
     }
 
     // shut down imgui
