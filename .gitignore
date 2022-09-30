@@ -5,6 +5,7 @@
 # Prerequisites
 *.d
 *.bat
+.ini
 
 # Compiled Object files
 *.slo
