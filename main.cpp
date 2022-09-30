@@ -1,9 +1,5 @@
 #include <imgui.h>
 #include <imgui-SFML.h>
-#include <iostream>
-#include <cmath>
-#include <string>
-#include <sstream>
 #include <SFML/Graphics.hpp>
 
 /* TODO
@@ -30,19 +26,14 @@ int main()
 
     // logic variables
     bool showCircle = true;
-    float circleRadius = 200.0f;
-    int circleSegments = 100;
-    float circleColor[3] = { (float)204/255, (float)77/255, (float)5/255};
+    float infectionRadius = 200.0f;
+    int infectionTime = 100;
+    float ScircleColor[3] = { (float)49/255, (float)96/255, (float)110/255};
+    float IcircleColor[3] = { (float)247/255, (float)102/255, (float)84/255};
+    float RcircleColor[3] = { (float)160/255, (float)159/255, (float)161/255};
+    int state = 0;
 
     // creating shapes
-    sf::CircleShape shape(circleRadius,100);
-    shape.setFillColor(sf::Color(
-        (int)(circleColor[0] * 255),
-        (int)(circleColor[1] * 255),
-        (int)(circleColor[2] * 255)
-    ));
-    shape.setOrigin(circleRadius, circleRadius);
-    shape.setPosition(400,300);
 
     // creating clock
     sf::Clock deltaClock;
@@ -66,35 +57,46 @@ int main()
         ImGui::SFML::Update(window, deltaClock.restart());
         // imgui stuff here
         ImGui::Begin("Control Panel");
-        ImGui::Checkbox("Circle", &showCircle);
-        ImGui::SliderFloat("Radius", &circleRadius, 100.0f, 300.0f);
-        ImGui::SliderInt("Segments", &circleSegments, 3, 150);
-        ImGui::ColorEdit3("Color", circleColor);
-        if (ImGui::Button("Simulate"))
-            std::cout << "Hello world!";
-        ImGui::Text("Stats");
-        ImGui::Text("S =");
-        ImGui::Text("I =");
-        ImGui::Text("R =");
-        ImGui::Text("fps =");
+        ImGui::SliderFloat("Radius", &infectionRadius, 100.0f, 300.0f);
+        ImGui::SliderInt("Time", &infectionTime, 3, 150);
+        ImGui::ColorEdit3("S Color", ScircleColor);
+        ImGui::ColorEdit3("I Color", IcircleColor);
+        ImGui::ColorEdit3("R Color", RcircleColor);
+        if (ImGui::Button("Reset")){
+            state = 0;
+        }
+        switch(state) {
+            case 0:
+                if (ImGui::Button("Simulate")){
+                    state = 1;
+                }
+                break;
+            case 1:
+                if (ImGui::Button("Pause")){
+                    state = 2;
+                }
+                break;
+            case 2:
+                if (ImGui::Button("Continue")){
+                    state = 1;
+                }
+                break;
+        }
+      
+        if (state != 0){
+            ImGui::Text("Stats");
+            ImGui::Text("S =");
+            ImGui::Text("I =");
+            ImGui::Text("R =");
+        }
+
         ImGui::Text("www.yahyaabdulmohsin.com");
         ImGui::End();
         // clear window
         window.clear(
         );
         // render shapes
-        if (showCircle){
 
-            shape.setPointCount(circleSegments);
-            shape.setRadius(circleRadius);
-            shape.setOrigin(circleRadius, circleRadius);
-            shape.setFillColor(sf::Color(
-                (int)(circleColor[0] * 255),
-                (int)(circleColor[1] * 255),
-                (int)(circleColor[2] * 255)
-            ));
-            window.draw(shape);
-        }
         // render imgui
         ImGui::SFML::Render(window);
         // display window
