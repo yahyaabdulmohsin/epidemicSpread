@@ -17,6 +17,7 @@ int main()
     ImGui::SFML::Init(window);
     // disaplying imgui.ini
     ImGui::GetIO().IniFilename = NULL;
+    // enabling docking
 
     // logic variables
     bool showCircle = true;
