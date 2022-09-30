@@ -54,7 +54,7 @@ int main()
         // update imgui
         ImGui::SFML::Update(window, deltaClock.restart());
         // imgui stuff here
-        ImGui::Begin("Simulation Control Panel");
+        ImGui::Begin("Control Panel");
         ImGui::Checkbox("Circle", &showCircle);
         ImGui::SliderFloat("Radius", &circleRadius, 100.0f, 300.0f);
         ImGui::SliderInt("Segments", &circleSegments, 3, 150);
