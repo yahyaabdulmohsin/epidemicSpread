@@ -1,6 +1,6 @@
 #include <imgui.h>
 #include <imgui-SFML.h>
-
+#include <iostream>
 #include <SFML/Graphics.hpp>
 
 int main()
@@ -57,6 +57,8 @@ int main()
         ImGui::SliderFloat("Radius", &circleRadius, 100.0f, 300.0f);
         ImGui::SliderInt("Segments", &circleSegments, 3, 150);
         ImGui::ColorEdit3("Color", circleColor);
+        if (ImGui::Button("Simulate"))
+            std::cout << "Hello world!";
         ImGui::Text("www.yahyaabdulmohsin.com");
         ImGui::End();
         // clear window
