@@ -59,5 +59,4 @@ bool Node::recover(){
         return true;
     }
     return false;
-    // stop clock
 }

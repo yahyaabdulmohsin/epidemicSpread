@@ -27,7 +27,7 @@ int main()
     srand (time(NULL));
 
     // creating window
-    sf::RenderWindow window(sf::VideoMode(800, 600), "epidemicSpread", sf::Style::Titlebar | sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(1280, 720), "epidemicSpread", sf::Style::Titlebar | sf::Style::Close);
 
     // modifying window
     //get window handle:    sf::WindowHandle handle = window.getSystemHandle();
@@ -84,7 +84,7 @@ int main()
         // imgui stuff here
         ImGui::Begin("Control Panel");
         if (state == 0){
-            ImGui::SliderInt("#Nodes", &numOfStartingNodes, 2, 2000);
+            ImGui::SliderInt("#Nodes", &numOfStartingNodes, 2, 5000);
             ImGui::SliderFloat("%OfI", &percentageOfInfected, 0.f, 100.0f);
             ImGui::SliderFloat("Radius", &infectionRadius, 1.f, 10.0f);
             ImGui::SliderInt("Time(I)", &infectionTime, 0, 10);
@@ -112,14 +112,14 @@ int main()
                     // figure out how many are infected
                     int numOfInfected = (percentageOfInfected/100)*numOfStartingNodes;
                     for (int i = 0; i < numOfStartingNodes-numOfInfected; i++){
-                        int chancex = rand() % 799 + 1;
-                        int chancey = rand() % 599 + 1;
+                        int chancex = rand() % 1279 + 1;
+                        int chancey = rand() % 719 + 1;
                         nodes.push_back(Node(0,chancex,chancey, ScircleColor, IcircleColor, RcircleColor, infectionRadius, timeToRecover));
                         numOfS++;
                     }
                     for (int i = 0; i < numOfInfected; i++){
-                        int chancex = rand() % 799 + 1;
-                        int chancey = rand() % 599 + 1;
+                        int chancex = rand() % 1279 + 1;
+                        int chancey = rand() % 719 + 1;
                         nodes.push_back(Node(1,chancex,chancey, ScircleColor, IcircleColor, RcircleColor, infectionRadius, timeToRecover));
                         numOfI++;
                     }
@@ -130,7 +130,6 @@ int main()
                 break;
             case 1:
                 // simulation logic here
-
                 // check if infection timer ended
                 elapsed = clock.getElapsedTime().asSeconds();
                 if (elapsed >= infectionTime){
@@ -175,15 +174,6 @@ int main()
                     // move nodes here
                 }
                 // logic ends here
-                if (ImGui::Button("Pause")){
-                    state = 2;
-                }
-                break;
-            case 2:
-                // simulation is paused here
-                if (ImGui::Button("Continue")){
-                    state = 1;
-                }
                 break;
         }
       
