@@ -2,7 +2,9 @@
 
 honors project for physics :)
 
-You need SFML and Dear ImGui
+You need:
+- SFML
+- Dear ImGui (included in source code)
 
 ![alt text](https://yahyaabdulmohsin.com/epidemicSpread/initial.png)
 
