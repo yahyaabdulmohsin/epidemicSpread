@@ -6,7 +6,7 @@ public:
     sf::CircleShape getCircle();
     int getType();
     void infect();
-    void recover();
+    bool recover();
 private:
     int timeToRecover;
     int type,x,y;

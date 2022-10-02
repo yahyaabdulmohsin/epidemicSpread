@@ -40,6 +40,9 @@ int main()
     ImGui::GetIO().IniFilename = NULL;
 
     // logic variables
+    int numOfS = 0;
+    int numOfI = 0;
+    int numOfR = 0;
     int numOfStartingNodes = 2;
     float percentageOfInfected = 0.f;
     float infectionRadius = 2.f;
@@ -97,6 +100,9 @@ int main()
                 nodes.pop_back();
             }
             state = 0;
+            numOfS = 0;
+            numOfI = 0;
+            numOfR = 0;
         }
         switch(state) {
             case 0:
@@ -109,11 +115,13 @@ int main()
                         int chancex = rand() % 799 + 1;
                         int chancey = rand() % 599 + 1;
                         nodes.push_back(Node(0,chancex,chancey, ScircleColor, IcircleColor, RcircleColor, infectionRadius, timeToRecover));
+                        numOfS++;
                     }
                     for (int i = 0; i < numOfInfected; i++){
                         int chancex = rand() % 799 + 1;
                         int chancey = rand() % 599 + 1;
                         nodes.push_back(Node(1,chancex,chancey, ScircleColor, IcircleColor, RcircleColor, infectionRadius, timeToRecover));
+                        numOfI++;
                     }
                     state = 1;
                     // start timer here
@@ -144,6 +152,8 @@ int main()
                                         // EXPOSED take chance and either infect or no
                                         int chance = rand() % 100 + 1;
                                         if ((float)chance <= probabilityOfInfection){
+                                            numOfS--;
+                                            numOfI++;
                                             nodes[j].infect();
                                         }
                                     }
@@ -156,8 +166,11 @@ int main()
 
                 // check if recover timer ended
                 for (int i = 0; i < nodes.size(); i++){
-                    if (nodes[i].getType() == 1){    
-                        nodes[i].recover();
+                    if (nodes[i].getType() == 1){
+                        if(nodes[i].recover()){
+                            numOfI--;
+                            numOfR++;
+                        }
                     }
                     // move nodes here
                 }
@@ -176,9 +189,9 @@ int main()
       
         if (state != 0){
             ImGui::Text("Stats");
-            ImGui::Text("S =");
-            ImGui::Text("I =");
-            ImGui::Text("R =");
+            ImGui::Text("S = %i", numOfS);
+            ImGui::Text("I = %i", numOfI);
+            ImGui::Text("R = %i", numOfR);
         }
 
         ImGui::Text("www.yahyaabdulmohsin.com");

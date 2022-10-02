@@ -50,12 +50,14 @@ void Node::infect(){
     this->clock.restart();
 }
 
-void Node::recover(){
+bool Node::recover(){
     this->elapsed = clock.getElapsedTime().asSeconds();
     if(elapsed >= this->timeToRecover){
         this->type = 2;
         this->rectangle.setFillColor(sf::Color(RcircleColor[0]*255, RcircleColor[1]*255, RcircleColor[2]*255));
         this->circle.setRadius(0);
+        return true;
     }
+    return false;
     // stop clock
 }
