@@ -4,6 +4,10 @@ honors project for physics :)
 
 You need SFML and Dear ImGui
 
+![alt text](https://yahyaabdulmohsin.com/epidemicSpread/initial.png)
+
+![alt text](https://yahyaabdulmohsin.com/epidemicSpread/final.png)
+
 Build with g++:
 
 >g++ -c main.cpp node.cpp C:\Users\yahya\Desktop\playground\c++\imgui\imgui.cpp C:\Users\yahya\Desktop\playground\c++\imgui\imgui_widgets.cpp C:\Users\yahya\Desktop\playground\c++\imgui\imgui_draw.cpp C:\Users\yahya\Desktop\playground\c++\imgui\imgui_tables.cpp C:\Users\yahya\Desktop\playground\c++\imgui\imgui-SFML.cpp -IC:\Users\yahya\Desktop\playground\c++\imgui -IC:\SFML-2.5.1\include -DSFML_STATIC
