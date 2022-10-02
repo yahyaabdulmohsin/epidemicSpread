@@ -45,7 +45,7 @@ int main()
     float infectionRadius = 2.f;
     int infectionTime = 3;
     float probabilityOfInfection = 50.f;
-    int timeToRecover = 0;
+    int timeToRecover = 5;
     float ScircleColor[3] = { (float)49/255, (float)96/255, (float)110/255};
     float IcircleColor[3] = { (float)247/255, (float)102/255, (float)84/255};
     float RcircleColor[3] = { (float)160/255, (float)159/255, (float)161/255};
@@ -81,7 +81,7 @@ int main()
         // imgui stuff here
         ImGui::Begin("Control Panel");
         if (state == 0){
-            ImGui::SliderInt("#Nodes", &numOfStartingNodes, 2, 100000);
+            ImGui::SliderInt("#Nodes", &numOfStartingNodes, 2, 2000);
             ImGui::SliderFloat("%OfI", &percentageOfInfected, 0.f, 100.0f);
             ImGui::SliderFloat("Radius", &infectionRadius, 1.f, 10.0f);
             ImGui::SliderInt("Time(I)", &infectionTime, 0, 10);
@@ -103,9 +103,18 @@ int main()
                 // initial logic here
                 if (ImGui::Button("Simulate")){
                     // generate shapes here
-                    nodes.push_back(Node(0,700,200, ScircleColor, IcircleColor, RcircleColor, infectionRadius));
-                    nodes.push_back(Node(0,550,310, ScircleColor, IcircleColor, RcircleColor, infectionRadius));
-                    nodes.push_back(Node(1,550,200, ScircleColor, IcircleColor, RcircleColor, infectionRadius));
+                    // figure out how many are infected
+                    int numOfInfected = (percentageOfInfected/100)*numOfStartingNodes;
+                    for (int i = 0; i < numOfStartingNodes-numOfInfected; i++){
+                        int chancex = rand() % 799 + 1;
+                        int chancey = rand() % 599 + 1;
+                        nodes.push_back(Node(0,chancex,chancey, ScircleColor, IcircleColor, RcircleColor, infectionRadius, timeToRecover));
+                    }
+                    for (int i = 0; i < numOfInfected; i++){
+                        int chancex = rand() % 799 + 1;
+                        int chancey = rand() % 599 + 1;
+                        nodes.push_back(Node(1,chancex,chancey, ScircleColor, IcircleColor, RcircleColor, infectionRadius, timeToRecover));
+                    }
                     state = 1;
                     // start timer here
                     clock.restart();
@@ -133,25 +142,25 @@ int main()
                                     }
                                     if (inRadius){
                                         // EXPOSED take chance and either infect or no
-                                        int chance = rand() % 101;
-                                        std::cout << chance << '\n';
+                                        int chance = rand() % 100 + 1;
                                         if ((float)chance <= probabilityOfInfection){
                                             nodes[j].infect();
                                         }
-                                    }else{
-                                        // not infected
                                     }
                                 }
                             }
                         }
                     }
-                    
-                        // if there are nodes take a chance and either infect them or no
                     clock.restart();
                 }
-                
-                // move nodes here
 
+                // check if recover timer ended
+                for (int i = 0; i < nodes.size(); i++){
+                    if (nodes[i].getType() == 1){    
+                        nodes[i].recover();
+                    }
+                    // move nodes here
+                }
                 // logic ends here
                 if (ImGui::Button("Pause")){
                     state = 2;
