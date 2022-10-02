@@ -1,7 +1,10 @@
 #include <iostream>
+#include <cmath>
 #include <imgui.h>
 #include <imgui-SFML.h>
 #include <SFML/Graphics.hpp>
+#include <stdlib.h>
+#include <time.h>
 #include "node.h"
 
 /* TODO
@@ -20,6 +23,9 @@ enable custom drawomg
 
 int main()
 {
+    // initialize random seed
+    srand (time(NULL));
+
     // creating window
     sf::RenderWindow window(sf::VideoMode(800, 600), "epidemicSpread", sf::Style::Titlebar | sf::Style::Close);
 
@@ -29,7 +35,7 @@ int main()
     //set framerate:        window.setFramerateLimit(60);
 
     // setting up imgui
-    ImGui::SFML::Init(window);
+    if (ImGui::SFML::Init(window));
     // disabling imgui.ini
     ImGui::GetIO().IniFilename = NULL;
 
@@ -48,8 +54,12 @@ int main()
     // creating shapes
     std::vector<Node> nodes;
     
-    // creating clock
+    // creating clock for imgui
     sf::Clock deltaClock;
+
+    // creating clock for nodes
+    sf::Clock clock;
+    float elapsed;
 
     // run the program as long as the window is open
     while (window.isOpen())
@@ -93,21 +103,54 @@ int main()
                 // initial logic here
                 if (ImGui::Button("Simulate")){
                     // generate shapes here
-                    nodes.push_back(Node(0,650,200, ScircleColor, IcircleColor, RcircleColor, infectionRadius));
+                    nodes.push_back(Node(0,700,200, ScircleColor, IcircleColor, RcircleColor, infectionRadius));
+                    nodes.push_back(Node(0,550,310, ScircleColor, IcircleColor, RcircleColor, infectionRadius));
                     nodes.push_back(Node(1,550,200, ScircleColor, IcircleColor, RcircleColor, infectionRadius));
                     state = 1;
+                    // start timer here
+                    clock.restart();
                 }
                 break;
             case 1:
                 // simulation logic here
+
+                // check if infection timer ended
+                elapsed = clock.getElapsedTime().asSeconds();
+                if (elapsed >= infectionTime){
+                    // check for each infected node if there are any nodes near
+                    for(int i = 0; i < nodes.size(); i++){
+                        if (nodes[i].getType() == 1){
+                            for (int j = 0; j < nodes.size(); j++){
+                                if (nodes[j].getType() == 0){
+                                    // check if node[j] is in node[i] infection radius
+                                    bool inRadius = false;
+                                    sf::Vector2f ipos = nodes[i].getShape().getPosition();
+                                    sf::Vector2f jpos = nodes[j].getShape().getPosition();
+                                    sf::Vector2f distanceVec = jpos - ipos;
+                                    float distance = std::sqrt((distanceVec.x*distanceVec.x)+(distanceVec.y*distanceVec.y));
+                                    if (distance <= infectionRadius*nodes[i].getShape().getSize().x){
+                                        inRadius = true;
+                                    }
+                                    if (inRadius){
+                                        // EXPOSED take chance and either infect or no
+                                        int chance = rand() % 101;
+                                        std::cout << chance << '\n';
+                                        if ((float)chance <= probabilityOfInfection){
+                                            nodes[j].infect();
+                                        }
+                                    }else{
+                                        // not infected
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                        // if there are nodes take a chance and either infect them or no
+                    clock.restart();
+                }
                 
-                    // start timer for infected nodes
-
-                    // when timer ends
-                        // check for each infected node if there are any nodes near
-                            // if there are nodes take a chance and either infect them or no
-
-                    // reset timer
+                // move nodes here
 
                 // logic ends here
                 if (ImGui::Button("Pause")){

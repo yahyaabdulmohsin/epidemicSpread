@@ -1,5 +1,9 @@
 #include "node.h"
 Node::Node(int type, int x, int y, float ScircleColor[], float IcircleColor[], float RcircleColor[], float infectionRadius){
+    this->ScircleColor = ScircleColor;
+    this->IcircleColor = IcircleColor;
+    this->RcircleColor = RcircleColor;
+    this->infectionRadius = infectionRadius;
     this->type = type;
     this->x = x;
     this->y = y;
@@ -33,4 +37,13 @@ sf::CircleShape Node::getCircle(){
 
 int Node::getType(){
     return this->type;
+}
+
+void Node::infect(){
+    this->type = 1;
+    this->rectangle.setFillColor(sf::Color(IcircleColor[0]*255, IcircleColor[1]*255, IcircleColor[2]*255));
+    this->circle.setRadius(infectionRadius*this->rectangle.getSize().x);
+    this->circle.setOrigin(infectionRadius*this->rectangle.getSize().x,infectionRadius*this->rectangle.getSize().x);
+    this->circle.setPosition(x,y);
+    this->circle.setFillColor(sf::Color(IcircleColor[0]*255, IcircleColor[1]*255, IcircleColor[2]*255, 50));
 }
