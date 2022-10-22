@@ -9,15 +9,13 @@
 
 /* TODO
 
-create node class
-test two nodes and make sure it works
-create node generation
+create infected node generation based on area
 create node movement
 _______________________
 enable docking
 show fps
 show graphs
-enable custom drawomg
+enable custom drawing
 
 */
 
@@ -47,6 +45,10 @@ int main()
     float percentageOfInfected = 0.f;
     float infectionRadius = 2.f;
     int infectionTime = 3;
+    int area1X = 427;
+    int area1Y = 240;
+    int area2X = 853;
+    int area2Y = 480;
     float probabilityOfInfection = 50.f;
     int timeToRecover = 5;
     float ScircleColor[3] = { (float)49/255, (float)96/255, (float)110/255};
@@ -86,6 +88,12 @@ int main()
         if (state == 0){
             ImGui::SliderInt("#Nodes", &numOfStartingNodes, 2, 5000);
             ImGui::SliderFloat("%OfI", &percentageOfInfected, 0.f, 100.0f);
+
+            ImGui::SliderInt("area1X", &area1X, 0, 1280);
+            ImGui::SliderInt("area1Y", &area1Y, 0, 720);
+            ImGui::SliderInt("area2X", &area2X, 0, 1280);
+            ImGui::SliderInt("area2Y", &area2Y, 0, 720);
+
             ImGui::SliderFloat("Radius", &infectionRadius, 1.f, 10.0f);
             ImGui::SliderInt("Time(I)", &infectionTime, 0, 10);
             ImGui::SliderFloat("POI", &probabilityOfInfection, 0.f, 100.0f);
