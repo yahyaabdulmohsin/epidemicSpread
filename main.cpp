@@ -99,8 +99,8 @@ int main()
 
                 ImGui::SliderInt("area1X", &area1X, 0, area2X-10);
                 ImGui::SliderInt("area1Y", &area1Y, 0, area2Y-10);
-                ImGui::SliderInt("area2X", &area2X, 0, 1280);
-                ImGui::SliderInt("area2Y", &area2Y, 0, 720);
+                ImGui::SliderInt("area2X", &area2X, area1X+10, 1280);
+                ImGui::SliderInt("area2Y", &area2Y, area1Y+10, 720);
 
                 ImGui::SliderFloat("Radius", &infectionRadius, 1.f, 10.0f);
                 ImGui::SliderInt("Time(I)", &infectionTime, 0, 10);
@@ -110,9 +110,12 @@ int main()
                 ImGui::ColorEdit3("IColor", IcircleColor);
                 ImGui::ColorEdit3("RColor", RcircleColor);
                 // initial infected area rectangle
+                rectangle.setSize(sf::Vector2f((float)area2X-area1X,(float)area2Y-area1Y));
+                rectangle.setPosition(area1X,area1Y);
                 window.draw(rectangle);
                 // initial logic here
                 if (ImGui::Button("Simulate")){
+                    srand((unsigned) time(NULL));
                     // generate shapes here
                     // figure out how many are infected
                     int numOfInfected = (percentageOfInfected/100)*numOfStartingNodes;
@@ -123,8 +126,8 @@ int main()
                         numOfS++;
                     }
                     for (int i = 0; i < numOfInfected; i++){
-                        int chancex = rand() % 1279 + 1;
-                        int chancey = rand() % 719 + 1;
+                        int chancex = rand() % (area2X-area1X) + area1X;
+                        int chancey = rand() % (area2Y-area1Y) + area1Y;
                         nodes.push_back(Node(1,chancex,chancey, ScircleColor, IcircleColor, RcircleColor, infectionRadius, timeToRecover));
                         numOfI++;
                     }
@@ -193,6 +196,20 @@ int main()
                         }
                     }
                     // move nodes here
+                    int randomX = 1 + (rand() % 12);
+                    int randomY = 1 + (rand() % 12);
+                    if (randomX <= 10){
+                        randomX *= -1;
+                    }else if (randomX >= 1280-nodes[i].getShape().getPosition().x){
+                        randomX *= -1;
+                    }
+                    if (randomY <= 10){
+                        randomY *= -1;
+                    }else if (randomY >= 720-nodes[i].getShape().getPosition().y){
+                        randomY *= -1;
+                    }
+                    nodes[i].setVelocityX(randomX);
+                    nodes[i].setVelocityY(randomY);
                 }
                 // logic ends here
                 break;
@@ -203,6 +220,7 @@ int main()
 
         // render shapes
         for (int i = 0; i < nodes.size(); i++){
+            nodes[i].move();
             window.draw(nodes[i].getShape());
             window.draw(nodes[i].getCircle());
         }

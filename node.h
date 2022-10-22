@@ -7,7 +7,14 @@ public:
     int getType();
     void infect();
     bool recover();
+    void setVelocityX(int newV);
+    int getVelocityX();
+    void setVelocityY(int newV);
+    int getVelocityY();
+    void move();
 private:
+    int vel_x;
+    int vel_y;
     int timeToRecover;
     int type,x,y;
     sf::RectangleShape rectangle{sf::Vector2f(10, 10)};

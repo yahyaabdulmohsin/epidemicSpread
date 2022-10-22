@@ -1,5 +1,7 @@
 #include "node.h"
 Node::Node(int type, int x, int y, float ScircleColor[], float IcircleColor[], float RcircleColor[], float infectionRadius, int timeToRecover){
+    this->vel_x = rand() % 20 + (-5);
+    this->vel_y = rand() % 20 + (-5);
     this->timeToRecover = timeToRecover;
     this->ScircleColor = ScircleColor;
     this->IcircleColor = IcircleColor;
@@ -59,4 +61,23 @@ bool Node::recover(){
         return true;
     }
     return false;
+}
+int  Node::getVelocityX(){
+    return this->vel_x;
+}
+int  Node::getVelocityY(){
+    return this->vel_y;
+}
+void Node::setVelocityX(int newV){
+    this->vel_x = newV;
+}
+void Node::setVelocityY(int newV){
+    this->vel_y = newV;
+}
+
+void Node::move(){
+    x = x+this->vel_x;
+    y = y+this->vel_y;
+    this->rectangle.setPosition(x,y);
+    this->circle.setPosition(x,y);
 }
