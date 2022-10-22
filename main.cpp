@@ -10,6 +10,7 @@
 /* TODO
 
 create infected node generation based on area
+make area dragable
 create node movement
 _______________________
 enable docking
@@ -58,7 +59,10 @@ int main()
 
     // creating shapes
     std::vector<Node> nodes;
-    
+    sf::RectangleShape rectangle(sf::Vector2f(128.0f,128.0f));
+    rectangle.setFillColor(sf::Color::Red);
+    rectangle.setPosition(320,240);
+
     // creating clock for imgui
     sf::Clock deltaClock;
 
@@ -85,35 +89,28 @@ int main()
         ImGui::SFML::Update(window, deltaClock.restart());
         // imgui stuff here
         ImGui::Begin("Control Panel");
-        if (state == 0){
-            ImGui::SliderInt("#Nodes", &numOfStartingNodes, 2, 5000);
-            ImGui::SliderFloat("%OfI", &percentageOfInfected, 0.f, 100.0f);
-
-            ImGui::SliderInt("area1X", &area1X, 0, 1280);
-            ImGui::SliderInt("area1Y", &area1Y, 0, 720);
-            ImGui::SliderInt("area2X", &area2X, 0, 1280);
-            ImGui::SliderInt("area2Y", &area2Y, 0, 720);
-
-            ImGui::SliderFloat("Radius", &infectionRadius, 1.f, 10.0f);
-            ImGui::SliderInt("Time(I)", &infectionTime, 0, 10);
-            ImGui::SliderFloat("POI", &probabilityOfInfection, 0.f, 100.0f);
-            ImGui::SliderInt("Time(R)", &timeToRecover, 0, 20);
-            ImGui::ColorEdit3("SColor", ScircleColor);
-            ImGui::ColorEdit3("IColor", IcircleColor);
-            ImGui::ColorEdit3("RColor", RcircleColor);
-        }else if (ImGui::Button("Reset")){
-            // delete shapes here
-            while (!nodes.empty())
-            {
-                nodes.pop_back();
-            }
-            state = 0;
-            numOfS = 0;
-            numOfI = 0;
-            numOfR = 0;
-        }
+        // clear window
+        window.clear();
         switch(state) {
             case 0:
+                // creating state 0 GUI
+                ImGui::SliderInt("#Nodes", &numOfStartingNodes, 2, 5000);
+                ImGui::SliderFloat("%OfI", &percentageOfInfected, 0.f, 100.0f);
+
+                ImGui::SliderInt("area1X", &area1X, 0, area2X-10);
+                ImGui::SliderInt("area1Y", &area1Y, 0, area2Y-10);
+                ImGui::SliderInt("area2X", &area2X, 0, 1280);
+                ImGui::SliderInt("area2Y", &area2Y, 0, 720);
+
+                ImGui::SliderFloat("Radius", &infectionRadius, 1.f, 10.0f);
+                ImGui::SliderInt("Time(I)", &infectionTime, 0, 10);
+                ImGui::SliderFloat("POI", &probabilityOfInfection, 0.f, 100.0f);
+                ImGui::SliderInt("Time(R)", &timeToRecover, 0, 20);
+                ImGui::ColorEdit3("SColor", ScircleColor);
+                ImGui::ColorEdit3("IColor", IcircleColor);
+                ImGui::ColorEdit3("RColor", RcircleColor);
+                // initial infected area rectangle
+                window.draw(rectangle);
                 // initial logic here
                 if (ImGui::Button("Simulate")){
                     // generate shapes here
@@ -137,6 +134,22 @@ int main()
                 }
                 break;
             case 1:
+                // creating state 1 GUI
+                ImGui::Text("Stats");
+                ImGui::Text("S = %i", numOfS);
+                ImGui::Text("I = %i", numOfI);
+                ImGui::Text("R = %i", numOfR);
+                if (ImGui::Button("Reset")){
+                    // delete shapes here
+                    while (!nodes.empty())
+                    {
+                        nodes.pop_back();
+                    }
+                    state = 0;
+                    numOfS = 0;
+                    numOfI = 0;
+                    numOfR = 0;
+                }
                 // simulation logic here
                 // check if infection timer ended
                 elapsed = clock.getElapsedTime().asSeconds();
@@ -184,25 +197,15 @@ int main()
                 // logic ends here
                 break;
         }
-      
-        if (state != 0){
-            ImGui::Text("Stats");
-            ImGui::Text("S = %i", numOfS);
-            ImGui::Text("I = %i", numOfI);
-            ImGui::Text("R = %i", numOfR);
-        }
 
         ImGui::Text("www.yahyaabdulmohsin.com");
         ImGui::End();
-        // clear window
-        window.clear(
-        );
+
         // render shapes
         for (int i = 0; i < nodes.size(); i++){
             window.draw(nodes[i].getShape());
             window.draw(nodes[i].getCircle());
         }
-        //window.draw(rectangle);
         // render imgui
         ImGui::SFML::Render(window);
         // display window
