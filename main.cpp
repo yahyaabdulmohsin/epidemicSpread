@@ -220,7 +220,6 @@ int main()
 
         // render shapes
         for (int i = 0; i < nodes.size(); i++){
-            nodes[i].move();
             window.draw(nodes[i].getShape());
             window.draw(nodes[i].getCircle());
         }
