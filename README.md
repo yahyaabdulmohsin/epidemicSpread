@@ -6,9 +6,9 @@ You need:
 - SFML
 - Dear ImGui (included in source code)
 
-![alt text](https://yahyaabdulmohsin.com/epidemicSpread/initial.png)
+![alt text](/epidemicSpread/initial.png)
 
-![alt text](https://yahyaabdulmohsin.com/epidemicSpread/final.png)
+![alt text](/epidemicSpread/final.png)
 
 Build with g++:
 
